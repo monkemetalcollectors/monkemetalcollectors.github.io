@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Monke's Metal Collectors</title>
+    <style>
+.Debris {
+    position: fixed;
+    top: 279px;
+    left: 279px;
+    z-index:50;
+  }
+.star {
+  z-index: -1;
+}
+body {
+	overflow: hidden;
+  background-color:black;
+}
+h1 {
+	color: white;
+	left: 40%;
+	top: 40%;
+	position: absolute;
+}
+h2 {
+	color: white;
+	left: 44%;
+	top: 45%;
+	position: absolute;
+}
+
+#abbb{
+  height:150px;
+  width:250px;
+  top:100px;
+  left:0px;
+  position:fixed;
+  z-index:100;
+  background-color:blue;
+}
+.ModC{
+  height:100%;
+  width:100%;
+  left:0px;
+  top:0px;
+  backgorund-color:rgba(255,255,255,0.8);
+  position:fixed;
+  z-index:200;
+  color:white;
+  text-align:center;
+
+}
+#hub{
+display: block;
+margin-left: 25vw;
+margin-top: 2.5vh;
+z-index: 110;
+height: 110vmin;
+width: 110vmin;
+position:relative;
+}
+#musicSwitch {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width:10vh;
+	height:10vh;
+	z-index:100;
+}
+.death {
+  animation:deathy 2s ease-in 0s 1 normal;
+}
+
+@keyframes deathy {
+  0% {transform:matrix(1,0,0,1,0,0)}
+  25% {transform:matrix(0.75,0,0,0.75,0,0)}
+  50% {transform:matrix(0.5,0,0,0.5,0,0)}
+  75% {transform:matrix(0.25,0,0,0.25,0,0)}
+  100% {transform:matrix(0,0,0,0,0,0)}
+
+}
+#coin {
+	position: absolute;
+	right:10vw;
+	top:0;
+	z-index: 50;
+}
+#coinCount {
+	position: absolute;
+	right:0;
+	top:0.5vh;
+	color: white;
+	font-size: 1.5em;
+	font-family: 'Press start 2P', cursive;
+	z-index: 50;
+}
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  </head>
+  <body>
+<input type="button" id="another" value="Shop" style="bottom:20px;right:20px;height:64px;width:128px;position:fixed;background-color:white;border:20px outset white;" onclick="anotherlink()">
+<div id="hub">
+  <img src="pics/hub1.png" id ="solarPanel"style="height: inherit; width: inherit; position: absolute; z-index: 1; right:1vw; bottom: 1vh"></img>
+  <img src = "pics/arm1.png" id="arm" style="height: 100%; width: 150%; position: absolute; right:7.5vw; bottom:-2.5vh"></img>
+</div>
+<img src="pics/coin.png" id="coin"> </img>
+	<div id="coinCount">PLACEHOLDER</div>
+    <div id="jbj"></div>
+    <div id="modalContainer" style="text-align:center;position:fixed;padding-top:200px;background-color:rgb(255,255,255,0.8);top:0px;left:0px;width:100%;height:100%;display:none;z-index:200;" >
+      <img src="pics/modal.png" height="300px" width="400px">
+      <div id="upgradecont" style="position:fixed; top:208px;left:446px;height:300px;width:400px;"></div>
+      <div style="background-color:blue;bottom:0px; left:0px;width:100%;height:400px;"><div style="left:10px;bottom:-5px;position:relative;height:100px;width:100px;background-color:black;" onclick="umenuOpen()"></div></div>
+      <div id="umenu"style="background-color:black;top:20%;left:20%;width:60%;height:65%;position:fixed;display:none;">
+        <div onclick="addThing(1)" style="z-index:201;width:350px;length:213px;left:68px;top:67px"></div>
+        <img src="pics/factory-icon.png" style="z-index:150;position:fixed;height:100%;width:100%;top:0px;left:0px;" ></img>
+        <div onclick="addThing(2)" style="z-index:202;width:350px;length:213px;top:298px;left:68px"></div>
+        <img src="pics/housing-icon.png" style="z-index:150;position:fixed;height:100%;width:100%;top:0px;left:0px;"></img>
+        <div onclick="addThing(3)" style="z-index:203;width:350px;length:213px;top:54px;left:859px"></div>
+        <img src="pics/storage-icon.png" style="z-index:150;position:fixed;height:100%;width:100%;top:0px;left:0px;"></img>
+        <div onclick="addThing(4)" style="z-index:204;width:350px;length:213px;top:298px;left:855px"></div>
+        <img src="pics/solar-icon.png" style="z-index:150;position:fixed;height:100%;width:100%;top:0px;left:0px;"></img>
+        <img src="pics/background-gui.png" style="z-index:110;position:fixed;height:100%;width:100%;top:0px;left:0px;"></img>
+
+        <span id="umenuclose"style="position:fixed;top:15px;left:35px ;color:#ffffff;font-size:40px;font-weight:bold;z-index:200;" onclick="umenuclose()">x upgrade</span>
+      </div>
+      <span id="closeringer"style="position:absolute;top:15px;right:75px;color:#000000;font-size:40px;text-shadow:0px 0px 10px white;font-weight:bold;z-index:100;" onclick="modalclose()">x modal</span>
+    </div>
+    <img id="musicSwitch" src="pics/musicSwitch.png" onClick="switchMusic()"></img>
+	   <audio id="music">
+		     <source src="music/calm.mp3" type="audio/mpeg">
+	    </audio>
+
+    <script>
+  var coins = 20;
+  setInterval(function() {
+		document.getElementById("coinCount").innerHTML = Math.floor(coins);
+		var coinsString = Math.floor(coins.toString());
+		document.getElementById("coin").style.right = (coinsString.length)*1.6 +"vw";
+	},10);
+  var upgCurrent = 2;
+  var upgNum = -1;
+  var upgCost=Math.pow(1.6,upgNum);
+  var facnum=1,housenum=1,pannum=1,storenum=1;
+  for(var bj = 0; bj<4;bj++){addThing(bj+1)};
+  function addThing(type){
+    coins= coins - upgCost;
+    upgNum++;
+    var upgradecont=document.getElementById("upgradecont");
+    var g = document.createElement("img");
+    if(type==1){var b = "Pics/FactoryIcon.png";facnum++;} else if(type == 2){var b = "Pics/HousingIcon.png";housenum++;} else if(type == 3){var b = "Pics/PanelsIcon.png";pannum++;}else if(type == 4){var b = "Pics/StorageIcon.png";storenum++;} else if (type==5) {armLevel += 1; document.getElementById("arm").src="pics/arm"+armLevel+".png";}
+	if (type != 5) {
+		g.src=b;
+		g.style.top=(208+(43*(upgNum%5))).toString() +"px";
+    g.style.left=(446+(32*Math.floor(upgNum/5))).toString() +"px";
+    g.style.height="40px";
+    g.style.width="30px";
+    g.style.zIndex="130";
+    g.style.position="fixed";
+    upgradecont.append(g);
+	}
+    upgCost=Math.pow(1.6,upgNum);
+
+}
+var juibuyio = setInterval(function(){if(coins<0){gameOver()}},100)
+function gameOver(){
+  document.body.innerHTML="<div style='color:white;font-size:50px;font-weight:bold;'>oops... something happend. And that something was you losing...</div>"
+}
+var a1 = Math.random()*1000
+var a2 = Math.random()*1000
+var a3 = Math.random()*1000
+var a4 = Math.random()*1000
+setInterval(function(){coins+=100*a1*facnum*0.001},10000);
+setInterval(function(){coins+=100*a1*storenum*0.001},10000);
+setInterval(function(){coins+=100*a1*housenum*0.001},10000);
+setInterval(function(){coins+=100*a1*panelnum*0.001},10000);
+
+    function anotherlink(){
+      buttonused();
+      setTimeout(modalOpen(),2000);
+    }
+    var btnn = document.getElementById("another");
+    function buttonused(){
+      btnn.style.border="20px inset white"
+      setTimeout(function(){btnn.style.border="20px outset white";},1000)
+    }
+    var modalbckgrnd = document.getElementById("modalContainer");
+    var startuper = document.getElementById("another");
+    var closererer = document.getElementById("closeringer");
+    function modalOpen(){
+      modalbckgrnd.style.display="block";
+    }
+    var umenu = document.getElementById("umenu");
+    function umenuOpen(){
+      var buy = window.prompt("Which item would you like to buy? - factory - 1 - housing - 2 - storage - 3 - solar panel - 4 - arm - 5");
+      if (buy==1||buy>1&&buy<6) {
+        addThing(Math.floor(buy));
+      } else {
+        alert("invalid number!");
+      }
+    }
+    function modalclose(){
+      modalbckgrnd.style.display="none";
+      }
+    function umenuclose(){
+      umenu.style.display="none";
+    }
+    var musicState = false;
+			function switchMusic() {
+				if (musicState) {
+					document.getElementById("music").pause()
+					musicState = false;
+				} else {
+					document.getElementById("music").play()
+					musicState = true;
+				}
+			}
+
+      //Debris object constructor
+	function Debris() {
+		this.size = Math.floor(Math.random()*3);
+		this.x = Math.floor(Math.random()*window.innerWidth);
+		this.y = window.innerHeight;
+		this.angle = Math.floor(Math.random()*45);
+		this.yspd = Math.floor(Math.random()*20);
+		this.xspd = Math.floor(Math.random()*20);
+		this.rotation = 0;
+		this.element = 0;
+		this.moveInterval = setInterval( () => this.move(), 100 );
+		this.draw = function() {
+			var Debris = document.createElement("img");
+			Debris.style.left = this.x.toString()+"px";
+			Debris.style.top=this.y.toString()+"px";
+			Debris.className = "Debris";
+			Debris.src = "pics/debris"+this.size+".png";
+			Debris.style.width = ((50*this.Size)+50)+"px";
+			Debris.style.length = ((50*this.Size)+50)+"px";
+			document.body.appendChild(Debris);
+			this.element = Debris;
+		}
+		this.draw();
+		this.move = function() {
+			this.rotation+=this.angle;
+			this.element.style.transform="rotate("+this.rotation.toString()+"deg)";
+			if(this.x>0 && this.y>0){
+				this.y = this.y-this.yspd;this.x=this.x-this.xspd;
+			}
+			else{
+				this.x=Math.floor(Math.random()*window.innerWidth);
+				this.y=window.innerHeight;
+			}
+			this.element.style.left=this.x.toString()+"px";
+			this.element.style.top=this.y.toString()+"px";
+			if (this.rotation>360) {
+				this.rotation-=360;
+			}
+		}
+		this.capture = function() {
+			clearInterval(this.moveInterval);
+      this.element.style.animation="deathy 2s ease-in 0s 1 normal";
+      var lkj = this.element;
+      coins += this.size;
+      setTimeout(function(){lkj.style.display="none";},2000);
+		}
+
+	}
+  var DebrisArray = [];
+  for (var poo=0;poo<100;poo++) {
+		DebrisArray[poo] = new Debris()
+    console.log(JSON.stringify(DebrisArray[poo]));
+	}
+  var dicb = [];
+  var kdown;
+  var armLevel = 1;
+  var canPress = true;
+  document.onkeypress=function(e){
+    if (e.keyCode==32&&canPress) {
+      kdown= true;
+      console.log(canPress);
+    }
+  }
+
+  document.onkeyup=function(){
+    if(kdown){
+      kdown=false;
+      canPress=false;
+      setTimeout(function(){
+        canPress=true;
+        console.log("keypress  :   "+canPress);
+        var locArray=[];
+        console.log(window.innerHeight*(0.6+(hubMarginTop-2.5)/10));
+        console.log(window.innerHeight*(0.4+(hubMarginTop-2.5)/10));
+        console.log(window.innerWidth*85/100-700);
+        console.log(window.innerWidth*0.85-900);
+        for(var m=0;m<DebrisArray.length;m++)
+        {
+          if(DebrisArray[m].x>window.innerWidth*((hubMarginLeft/100)-0.15) && DebrisArray[m].x<window.innerWidth*((hubMarginLeft/100)-0.05)){
+            if(DebrisArray[m].y<window.innerHeight*(0.5+((hubMarginTop-2.5)/100)) && DebrisArray[m].y>window.innerHeight*((0.5+(hubMarginTop-2.5)/100))-200){
+				console.log("captured at "+DebrisArray[m].x+","+DebrisArray[m].y);
+              DebrisArray[m].capture();
+            }
+          }
+        }
+      },3000/(armLevel*(storenum*housenum*0.1)));
+    }
+
+  }
+// This part of the code is for the starry background
+var star_x = []; //
+var star_y = [];
+var star_bright = [];
+var star_size = [];
+for (q=0; q<100; q++) {
+  star_x[q] = Math.floor(Math.random()*window.innerWidth-1);
+  star_y[q] = Math.floor(Math.random()*window.innerHeight);
+  star_bright[q] = Math.floor(Math.random()*55)+200;
+  star_size[q] = Math.floor(Math.random()*2)+3;
+  var star = document.createElement("div");
+  star.style.width = star_size[q]+"px";
+  star.style.height = star_size[q]+"px";
+  star.style.backgroundColor = "rgba(255,255,255,"+star_bright[q]+")";
+  star.style.position = "absolute";
+  star.style.left = star_x[q]+"px";
+  star.style.top = star_y[q]+"px";
+  star.className = "star";
+  document.body.appendChild(star)
+}
+// upgrade hub graphic function
+	function upgradeHub(level) {
+		document.getElementById("hub").src = "pics/hub"+level+".png";
+	}
+
+setInterval(function(){
+document.querySelectorAll('.star').forEach(e => e.remove());
+for (l=0; l<100; l++) {
+
+star_x[l] = star_x[l]-3; //shifts the stars to the left by 3 px
+
+if(star_x [l]< 0) { //makes sure the stars wont go off screen
+  star_x[l] = star_x[l] + window.innerWidth-1;
+  star_y[l] = Math.floor(Math.random()*window.innerHeight);
+  star_bright[l] = Math.floor(Math.random()*55)+200;
+  star_size[l] = Math.floor(Math.random()*2)+3;
+
+}
+var star = document.createElement("div");
+star.style.width = star_size[l]+"px";
+star.style.height = star_size[l]+"px";
+star.style.backgroundColor = "rgba(255,255,255,"+star_bright[l]+")";
+star.style.position = "absolute";
+star.style.left = star_x[l]+"px";
+star.style.top = star_y[l]+"px";
+star.className = "star";
+document.body.appendChild(star);
+}
+},100);
+
+//Detecting keyboard input for moving the ship
+var hub = document.getElementById("hub");
+var hubMarginTop = 2.5;
+var hubMarginLeft = 25;
+document.onkeydown = function(e){
+  if(e.keyCode==87){
+      console.log("w");
+  	if (hubMarginTop>-1) {
+  		hubMarginTop -=0.2*armLevel;
+  		hub.style.marginTop=hubMarginTop+"vh";
+  	}
+   }
+    else if(e.keyCode==65){
+  	console.log("a");
+  	if (hubMarginLeft>0) {
+  		hubMarginLeft -=0.2*armLevel;
+  		hub.style.marginLeft=hubMarginLeft+"vw";
+  	}
+    }
+    else if(e.keyCode==83){
+  	console.log("s");
+  	if (hubMarginTop<20) {
+  		hubMarginTop +=0.2*armLevel;
+  		hub.style.marginTop=hubMarginTop+"vh";
+  	}
+     }
+    else if(e.keyCode==68){
+  	console.log("d");
+  	if (hubMarginLeft<50) {
+  		hubMarginLeft +=0.2*armLevel;
+  		hub.style.marginLeft=hubMarginLeft+"vw";
+  	}
+     }
+     else if(e.keyCode==69) {
+  	console.log("e");
+  	hub.style.transform+="rotate(5deg)";
+     }
+     else if(e.keyCode==81) {
+  	console.log("q");
+  	hub.style.transform+="rotate(-5deg)";
+     }
+}
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+  </body>
+<html>
